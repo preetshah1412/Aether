@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether | Bio-Metrical Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#050505] text-white font-['Outfit'] min-h-screen overflow-x-hidden">
+
+    <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-cyan-neon rounded-xl flex items-center justify-center shadow-glow-cyan">
+                    <i data-lucide="zap" class="text-black w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-black uppercase tracking-tighter">Aether</span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-10">
+                <a href="index.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Dashboard</a>
+                <a href="habits.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Habits</a>
+                <a href="bio.html" class="text-cyan-neon transition-all text-xs font-black uppercase tracking-widest relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-cyan-neon">Bio-Tracker</a>
+                <a href="gym.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Gym Log</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="glass px-5 py-2 rounded-full border-white/10 flex items-center gap-3">
+                    <span class="system-status-badge"><span></span>System Online</span>
+                    <span id="potential-score-nav" class="text-xs font-black uppercase tracking-widest text-white font-['JetBrains_Mono']">20%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto space-y-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 animate-in">
+            <div class="space-y-2">
+                <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+                    Bio-Tracker
+                </h1>
+                <p class="text-gray-500 font-bold uppercase tracking-[0.4em] text-xs pl-2">Sector 03: Biological Equilibrium</p>
+            </div>
+            
+            <button onclick="window.app.showFoodModal()" class="px-8 py-4 bg-cyan-neon text-black font-black uppercase tracking-widest text-xs rounded-2xl hover:scale-105 transition-all shadow-glow-cyan">
+                Log Intake +
+            </button>
+        </div>
+
+        <div class="grid grid-cols-12 gap-10 items-start">
+            <div class="col-span-12 lg:col-span-5 space-y-8 animate-in" style="animation-delay: 0.1s">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-gray-500">Neural Calibration</h3>
+                    <div class="h-px flex-1 mx-6 bg-white/5"></div>
+                </div>
+
+                <div id="bio-calibration-card" class="reactive-card calibration-card glass-heavy rounded-[40px] p-10 border-white/10 space-y-10" data-archetype="mesomorph">
+                    <div class="space-y-4">
+                        <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Anatomical Archetype</span>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button class="body-type-btn text-[10px] font-black uppercase tracking-widest transition-all" data-type="ectomorph">Ecto</button>
+                            <button class="body-type-btn text-[10px] font-black uppercase tracking-widest transition-all active" data-type="mesomorph">Meso</button>
+                            <button class="body-type-btn text-[10px] font-black uppercase tracking-widest transition-all" data-type="endomorph">Endo</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Mass (KG)</span>
+                            <input id="bio-weight" type="text" inputmode="decimal" class="bio-input font-['JetBrains_Mono']" value="80">
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Elevation (CM)</span>
+                            <input id="bio-height" type="text" inputmode="decimal" class="bio-input font-['JetBrains_Mono']" value="180">
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Age</span>
+                            <input id="bio-age" type="text" inputmode="numeric" class="bio-input font-['JetBrains_Mono']" value="25">
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Hydration (ML)</span>
+                            <input id="bio-hydration" type="text" inputmode="numeric" class="bio-input font-['JetBrains_Mono']" value="1200">
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest pl-2">Neural Gender Baseline</span>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="gender-toggle-btn active" data-gender="male">Male +5</button>
+                            <button class="gender-toggle-btn" data-gender="female">Female -161</button>
+                        </div>
+                    </div>
+
+                    <button id="save-bio-btn" class="sync-profile-btn">
+                        Sync Profile
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-7 space-y-8 animate-in" style="animation-delay: 0.2s">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-gray-500">Metabolic Equilibrium</h3>
+                    <div class="h-px flex-1 mx-6 bg-white/5"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div id="bio-tdee-card" class="reactive-card metric-card glass-heavy p-8 rounded-[40px] border-white/5 space-y-4 text-center">
+                        <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest">TDEE Threshold</span>
+                        <div id="bio-tdee" class="metric-number text-4xl font-black">2,400</div>
+                        <div class="text-[8px] text-cyan-neon font-black uppercase tracking-widest">Archetype Scaled</div>
+                    </div>
+                    <div class="reactive-card metric-card glass-heavy p-8 rounded-[40px] border-white/5 space-y-4 text-center">
+                        <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest">Current Intake</span>
+                        <div id="bio-current" class="metric-number text-4xl font-black text-cyan-neon">1,420</div>
+                        <div class="text-[8px] text-gray-500 font-black uppercase tracking-widest">Total Kcal</div>
+                    </div>
+                    <div id="bio-balance-card" class="reactive-card metric-card glass-heavy p-8 rounded-[40px] border-white/5 space-y-4 text-center">
+                        <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest">Net Balance</span>
+                        <div id="bio-balance" class="metric-number text-4xl font-black text-emerald-500">-980</div>
+                        <div class="text-[8px] text-gray-500 font-black uppercase tracking-widest">Remaining</div>
+                    </div>
+                </div>
+
+                <div class="reactive-card glass-heavy rounded-[40px] border-white/5 overflow-hidden">
+                    <div class="p-8 border-b border-white/5 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-black uppercase tracking-widest">Intake Log</h4>
+                            <i data-lucide="database" class="w-4 h-4 text-gray-600"></i>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 items-center">
+                            <div class="relative h-44">
+                                <canvas id="macroPieChart"></canvas>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                                <div class="w-full space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <span>Macro-Brain</span>
+                                        <span id="bio-status" class="font-['JetBrains_Mono'] text-cyan-neon text-right">[SYSTEM]: Tracking.</span>
+                                    </div>
+                                    <div id="macro-legend" class="space-y-3">
+                                        <div class="macro-legend-row protein"><span>Protein</span><b id="macro-protein-label">0%</b></div>
+                                        <div class="macro-legend-row carbs"><span>Carbs</span><b id="macro-carbs-label">0%</b></div>
+                                        <div class="macro-legend-row fats"><span>Fats</span><b id="macro-fats-label">0%</b></div>
+                                    </div>
+                                    <div id="bio-terminal-feed" class="terminal-feed">
+                                        <div>> [SYSTEM]: Awaiting metabolic input.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="max-h-[340px] overflow-y-auto no-scrollbar" id="bio-intake-list">
+                        <!-- Items injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] hidden items-center justify-center p-6">
+        <div class="reactive-card glass-heavy w-full max-w-xl rounded-[40px] p-12 border-white/10 animate-in relative">
+            <button onclick="document.getElementById('modal-overlay').classList.replace('flex','hidden')" class="absolute top-8 right-8 text-gray-500 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 id="modal-title" class="text-4xl font-black uppercase tracking-tighter mb-8">Log Intake</h2>
+            <div id="modal-content" class="mb-10"></div>
+            <button id="modal-submit" class="w-full py-6 bg-cyan-neon text-black font-black uppercase tracking-widest rounded-2xl hover:scale-[0.98] transition-all shadow-glow-cyan">
+                Confirm Log
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            if (window.app) window.app.renderAll();
+        });
+    </script>
+</body>
+</html>

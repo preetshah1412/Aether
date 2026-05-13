@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether | Peak Potential Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#050505] text-white font-['Outfit'] min-h-screen overflow-x-hidden">
+
+    <!-- Premium Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-cyan-neon rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                    <i data-lucide="zap" class="text-black w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-black uppercase tracking-tighter">Aether</span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-10">
+                <a href="index.html" class="text-cyan-neon transition-all text-xs font-black uppercase tracking-widest relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-cyan-neon">Dashboard</a>
+                <a href="habits.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Habits</a>
+                <a href="bio.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Bio-Tracker</a>
+                <a href="gym.html" class="text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Gym Log</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="glass px-6 py-2 rounded-full border-white/10 flex items-center gap-3">
+                    <span class="system-status-badge"><span></span>System Online</span>
+                    <div class="w-2 h-2 rounded-full bg-cyan-neon animate-pulse"></div>
+                    <span id="potential-score-nav" class="text-xs font-black uppercase tracking-widest text-white">20%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto space-y-16">
+        
+        <!-- Hero Section -->
+        <div class="grid grid-cols-12 gap-10 items-center">
+            <div class="dashboard-hero-copy col-span-12 lg:col-span-7 space-y-8 animate-in min-w-0">
+                <div class="space-y-2">
+                    <h1 class="dashboard-hero-title text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600">
+                        Peak<br>Potential
+                    </h1>
+                    <p class="text-gray-500 font-bold uppercase tracking-[0.6em] text-xs pl-2">System Core | Sector 01</p>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                <div class="reactive-card glass p-6 rounded-3xl border-white/5 space-y-2 flex-1">
+                        <span class="text-[10px] text-gray-600 font-black uppercase tracking-widest">Global Rank</span>
+                        <div class="text-2xl font-black">#1,402</div>
+                    </div>
+                    <div class="reactive-card glass p-6 rounded-3xl border-white/5 space-y-2 flex-1">
+                        <span class="text-[10px] text-gray-600 font-black uppercase tracking-widest">Sync Level</span>
+                        <div class="text-2xl font-black text-cyan-neon">Optimal</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-gauge-col col-span-12 lg:col-span-5 flex justify-center animate-in" style="animation-delay: 0.2s">
+                <div class="dashboard-gauge-wrap relative w-[400px] h-[400px]">
+                    <canvas id="potentialChart"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span id="potential-score" class="text-7xl font-black tracking-tighter">20%</span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">Actualized</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="reactive-card dashboard-metric-card arsenal-card group animate-in" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-neon/10 flex items-center justify-center text-cyan-neon">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-gray-700 uppercase tracking-widest">Streak</span>
+                </div>
+                <h3 id="dash-streak" class="text-3xl font-black mb-1">12 Days</h3>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Consistency Lock</p>
+            </div>
+
+            <div class="reactive-card dashboard-metric-card arsenal-card group animate-in" style="animation-delay: 0.4s">
+                <div class="flex items-center justify-between mb-8">
+                    <div id="focus-icon" class="w-12 h-12 rounded-2xl bg-violet-neon/10 flex items-center justify-center text-violet-neon">
+                        <i data-lucide="brain" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-gray-700 uppercase tracking-widest">Focus</span>
+                </div>
+                <h3 id="dash-habits" class="text-3xl font-black mb-1">0/3</h3>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sectors Calibrated</p>
+            </div>
+
+            <div class="reactive-card dashboard-metric-card arsenal-card group animate-in" style="animation-delay: 0.5s">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-crimson/10 flex items-center justify-center text-crimson">
+                        <i data-lucide="activity" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-gray-700 uppercase tracking-widest">Energy</span>
+                </div>
+                <h3 id="dash-calories" class="text-3xl font-black mb-1">0</h3>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Calories Logged</p>
+            </div>
+
+            <div class="reactive-card dashboard-metric-card arsenal-card group animate-in" style="animation-delay: 0.6s">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold">
+                        <i data-lucide="award" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-gray-700 uppercase tracking-widest">Strength</span>
+                </div>
+                <h3 id="dash-power-tier" class="text-3xl font-black mb-1">Dormant</h3>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Power Tier Level</p>
+                <div class="mt-5">
+                    <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-gray-600">
+                        <span>Output</span>
+                        <span id="dash-power" class="text-violet-neon">0 kg</span>
+                    </div>
+                    <div class="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
+                        <div id="dash-power-bar" class="h-full bg-violet-neon transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Intelligence Feed -->
+        <div class="grid grid-cols-12 gap-10">
+            <div class="col-span-12 lg:col-span-8 space-y-8 animate-in" style="animation-delay: 0.7s">
+                <div class="flex items-center justify-between px-2">
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-gray-500">Live Optimization Feed</h2>
+                    <div class="h-px flex-1 mx-6 bg-white/5"></div>
+                </div>
+                
+                <div id="live-feed" class="dashboard-feed space-y-4">
+                    <!-- Reactive feed injected by JS -->
+                </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4 animate-in" style="animation-delay: 0.8s">
+                <div class="reactive-card glass-heavy rounded-[40px] p-8 border-white/5 h-full">
+                    <h3 class="text-lg font-black uppercase tracking-tighter mb-6">Sector Alerts</h3>
+                    <div id="sector-alerts" class="space-y-6">
+                        <!-- Reactive alerts injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            if (window.app) {
+                window.app.renderAll();
+            }
+        });
+    </script>
+</body>
+</html>
